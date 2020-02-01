@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Item
   - Spawn
+  - CannonBall
+  - ProgressBar
+  - Ship
   layers:
   - Default
   - TransparentFX
