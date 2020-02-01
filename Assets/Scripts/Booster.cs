@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Booster : Interactable
 {
+    protected override void finishInteract(Interacter target)
+    {
+        
+    }
+
     protected override void interact(Interacter target)
     {
         //do something with target's stats

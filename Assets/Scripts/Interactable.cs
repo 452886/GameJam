@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public abstract class Interactable : MonoBehaviour
 {
     [SerializeField]
     List<Interacter> inRangeUsers;
+    public bool isActive = true;
 
     bool isBeingUsed = false;
 
     void Start()
     {
-        SphereCollider collider = gameObject.AddComponent<SphereCollider>();
-        collider.center = new Vector3(0, -0.5f, 0);
-        collider.isTrigger = true;
-        collider.radius = 3;        //radius of the trigger is manually set here for now
+        SphereCollider collider = gameObject.GetComponent<SphereCollider>();
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -75,6 +74,12 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 
+    public void FinishInteract(Interacter target) {
+        finishInteract(target);
+        isBeingUsed = false;
+    }
+
     protected abstract void interact(Interacter target);
+    protected abstract void finishInteract(Interacter target);
 
 }
