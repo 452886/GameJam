@@ -7,6 +7,11 @@ public class Interacter : MonoBehaviour
 {
     [SerializeField]
     List<Interactable> inRangeInteractables;
+    
+    [SerializeField] ActivePlayer activePlayer;
+
+    private Pickup carryItem = null;
+    private Interactable closest;
 
     void start()
     {
@@ -15,12 +20,22 @@ public class Interacter : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown(ActivePlayerData.Fire(activePlayer)))
         {
-            Interactable closest = ClosestInRangeItem();
-            if (closest)
+            this.closest = ClosestInRangeItem();
+            if (this.closest)
             {
+                carryItem = closest is Pickup ? (Pickup)closest : null;
                 closest.Interact(this);
+            }
+        }
+
+
+        if(Input.GetButtonUp(ActivePlayerData.Fire(activePlayer)))
+        {
+            if (this.closest)
+            {
+                this.closest.FinishInteract(this);
             }
         }
     }
@@ -29,26 +44,18 @@ public class Interacter : MonoBehaviour
     {
         if (inRangeInteractables.Count > 0)
         {
-            if (inRangeInteractables.Count == 1)
+            float lowestDist = Mathf.Infinity;
+            closest = null;
+            for (int i = 0; i < inRangeInteractables.Count; i++)
             {
-                return inRangeInteractables[0];
-            }
-            else
-            {
-                float lowestDist = Mathf.Infinity;
-                Interactable closest = null;
-                for (int i = 0; i < inRangeInteractables.Count; i++)
+                float current = calcDist(inRangeInteractables[i].transform);
+                if (current < lowestDist && inRangeInteractables[i].isActive)
                 {
-                    float current = calcDist(inRangeInteractables[i].transform);
-                    if (current < lowestDist)
-                    {
-                        lowestDist = current;
-                        closest = inRangeInteractables[i];
-                    }
+                    lowestDist = current;
+                    closest = inRangeInteractables[i];
                 }
-
-                return closest;
             }
+            return closest;
         }
         else
         {
@@ -64,10 +71,15 @@ public class Interacter : MonoBehaviour
 
     public virtual void InteractableEntersRange(Interactable interactable)
     {
-        if (!inRangeInteractables.Contains(interactable))
+        if (interactable is Booster || interactable is CageTrap)
+        {
+            interactable.Interact(this);
+        }
+        else if (!inRangeInteractables.Contains(interactable))
         {
             inRangeInteractables.Add(interactable);
             Debug.Log("item entered range: " + inRangeInteractables.Count + " items in range");
+
         }
     }
 
@@ -82,6 +94,7 @@ public class Interacter : MonoBehaviour
         if (inRangeInteractables.Contains(interactable))
         {
             inRangeInteractables.Remove(interactable);
+            if (interactable == this.closest) this.closest.FinishInteract(this);
         }
         Debug.Log("item exited range: " + interactable.name);
     }
