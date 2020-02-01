@@ -10,6 +10,7 @@ public class Interacter : MonoBehaviour
     
     [SerializeField] ActivePlayer activePlayer;
 
+    private Pickup carryItem = null;
     private Interactable closest;
 
     void start()
@@ -24,6 +25,7 @@ public class Interacter : MonoBehaviour
             this.closest = ClosestInRangeItem();
             if (this.closest)
             {
+                carryItem = closest is Pickup ? (Pickup)closest : null;
                 closest.Interact(this);
             }
         }
