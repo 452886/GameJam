@@ -8,6 +8,8 @@ public class Interacter : MonoBehaviour
     [SerializeField]
     List<Interactable> inRangeInteractables;
 
+    private Interactable closest;
+
     void start()
     {
         inRangeInteractables = new List<Interactable>();
@@ -15,12 +17,19 @@ public class Interacter : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetButtonDown("Fire1"))
         {
-            Interactable closest = ClosestInRangeItem();
-            if (closest)
+            this.closest = ClosestInRangeItem();
+            if (this.closest)
             {
                 closest.Interact(this);
+            }
+        }
+
+        if(Input.GetButtonUp("Fire1"))
+        {
+            if(this.closest) {
+                this.closest.FinishInteract(this);
             }
         }
     }
@@ -29,26 +38,18 @@ public class Interacter : MonoBehaviour
     {
         if (inRangeInteractables.Count > 0)
         {
-            if (inRangeInteractables.Count == 1)
-            {
-                return inRangeInteractables[0];
-            }
-            else
-            {
                 float lowestDist = Mathf.Infinity;
-                Interactable closest = null;
+                closest = null;
                 for (int i = 0; i < inRangeInteractables.Count; i++)
                 {
                     float current = calcDist(inRangeInteractables[i].transform);
-                    if (current < lowestDist)
+                    if (current < lowestDist && inRangeInteractables[i].isActive)
                     {
                         lowestDist = current;
                         closest = inRangeInteractables[i];
                     }
                 }
-
                 return closest;
-            }
         }
         else
         {
@@ -82,6 +83,7 @@ public class Interacter : MonoBehaviour
         if (inRangeInteractables.Contains(interactable))
         {
             inRangeInteractables.Remove(interactable);
+            if(interactable == this.closest) this.closest.FinishInteract(this);
         }
         Debug.Log("item exited range: " + interactable.name);
     }
