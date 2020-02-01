@@ -5,10 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/mainmenu.unity
     guid: 52d9b9eda8f387103832ff0148cf304c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Demomap.unity
     guid: a83351b94caa8f42280a630108d392a6
+  - enabled: 1
+    path: Assets/Scenes/ShipProgress.unity
+    guid: acba0bb2fbe6b5a2f851b4fd8f6856c6
   m_configObjects: {}
