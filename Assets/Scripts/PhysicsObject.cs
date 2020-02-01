@@ -7,7 +7,8 @@ public class PhysicsObject : MonoBehaviour
 {
     [Header("Physics Object")]
     [SerializeField] float gravity = -20f;
-    
+    [SerializeField] bool dontCollide;
+
     private CharacterController controller;
     private float currentGravity = 0f;
     private Vector3 velocity;
@@ -16,6 +17,9 @@ public class PhysicsObject : MonoBehaviour
     public virtual void Start()
     {
         this.controller = GetComponent<CharacterController>();
+        if(dontCollide) {
+            controller.detectCollisions = false;
+        }
     }
 
     // Update is called once per frame
