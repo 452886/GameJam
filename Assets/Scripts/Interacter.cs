@@ -7,6 +7,8 @@ public class Interacter : MonoBehaviour
 {
     [SerializeField]
     List<Interactable> inRangeInteractables;
+    
+    [SerializeField] ActivePlayer activePlayer;
 
     private Interactable closest;
 
@@ -17,7 +19,7 @@ public class Interacter : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown(ActivePlayerData.Fire(activePlayer)))
         {
             this.closest = ClosestInRangeItem();
             if (this.closest)
@@ -26,7 +28,8 @@ public class Interacter : MonoBehaviour
             }
         }
 
-        if (Input.GetButtonUp("Fire1"))
+
+        if(Input.GetButtonUp(ActivePlayerData.Fire(activePlayer)))
         {
             if (this.closest)
             {

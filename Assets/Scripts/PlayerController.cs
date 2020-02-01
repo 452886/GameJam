@@ -6,6 +6,7 @@ public class PlayerController : PhysicsObject
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float acceleration = 2f;
     [SerializeField] float deceleration = 5f;
+    [SerializeField] ActivePlayer activePlayer = ActivePlayer.PLAYER1;
     private Vector3 moveVelocity;
 
     private float currentMovementSpeed = 5f;
@@ -56,8 +57,8 @@ public class PlayerController : PhysicsObject
     public override void Update()
     {
 
-        var xAxis = movingDisabled ? 0 : Input.GetAxisRaw("Horizontal");
-        var yAxis = movingDisabled ? 0 : Input.GetAxisRaw("Vertical");
+        var xAxis = movingDisabled ? 0 : Input.GetAxisRaw(ActivePlayerData.Horizontal(activePlayer));
+        var yAxis = movingDisabled ? 0 : Input.GetAxisRaw(ActivePlayerData.Vertical(activePlayer));
 
         SetVelocity(new Vector3(xAxis, 0f, yAxis).normalized * currentMovementSpeed);
         
