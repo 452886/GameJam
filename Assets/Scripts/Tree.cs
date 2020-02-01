@@ -7,13 +7,30 @@ public class Tree : Interactable
     [SerializeField] float duration = 5f;
     [SerializeField] float respawnDuration = 10f;
     [SerializeField] GameObject treeMesh;
-    [SerializeField] Slider slider;
-    [SerializeField] GameObject sliderUI;
 
     private float currentDuration;
     private float currentRespawnDuration = 0f;
-
     bool interacting = false;
+
+    // Slider
+    [SerializeField] Transform sliderposition;
+    [SerializeField] GameObject treeSliderPrefab;
+    [SerializeField] Transform canvas;
+    private GameObject spawnedTreeSlider;
+    private Slider slider;
+
+
+    void Start()
+    {
+        spawnedTreeSlider = Instantiate(treeSliderPrefab);
+        spawnedTreeSlider.transform.parent = canvas;
+        
+        slider = spawnedTreeSlider.GetComponent<Slider>();
+
+        slider.maxValue = duration;
+        spawnedTreeSlider.SetActive(false);
+    }
+
     protected override void interact(Interacter target)
     {
         interacting = true;
@@ -24,21 +41,17 @@ public class Tree : Interactable
         interacting = false;
     }
 
-    void Start()
-    {
-        slider.maxValue = duration;
-    }
-
     void Update()
     {
         if(isActive) {
             if(interacting) {
-                sliderUI.SetActive(true);
+                UpdatSliderPosition();
+                spawnedTreeSlider.SetActive(true);
                 currentDuration += Time.deltaTime;
             }
             else {
                 currentDuration = 0f;
-                sliderUI.SetActive(false);
+                spawnedTreeSlider.SetActive(false);
             }
 
             if(currentDuration >= duration) {
@@ -47,7 +60,7 @@ public class Tree : Interactable
                 treeMesh.SetActive(false);
             }
         } else {
-            sliderUI.SetActive(false);
+            spawnedTreeSlider.SetActive(false);
             currentRespawnDuration += Time.deltaTime;
             if(currentRespawnDuration >= respawnDuration) {
                 isActive = true;
@@ -56,6 +69,11 @@ public class Tree : Interactable
             }
         }
         slider.value = currentDuration;
+    }
+
+    public void UpdatSliderPosition() {
+        Vector3 pos = Camera.main.WorldToScreenPoint(sliderposition.position);
+        spawnedTreeSlider.transform.position = pos;
     }
 
 }
