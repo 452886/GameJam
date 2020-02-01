@@ -5,8 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public abstract class Interactable : MonoBehaviour
 {
-    [SerializeField]
-    List<Interacter> inRangeUsers;
     public bool isActive = true;
 
     bool isBeingUsed = false;
@@ -22,23 +20,14 @@ public abstract class Interactable : MonoBehaviour
 
     void userEntersRange(Interacter enteringInteractor)
     {
-        if (!inRangeUsers.Contains(enteringInteractor))
-            inRangeUsers.Add(enteringInteractor);
-
         enteringInteractor.InteractableEntersRange(this);
     }
 
     void usererExitsRange(Interacter exitingTaker)
     {
-        if (inRangeUsers.Contains(exitingTaker))
-            inRangeUsers.Remove(exitingTaker);
-
         exitingTaker.InteractableExitsRange(this);
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
-
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     void OnTriggerEnter(Collider collider)
     {
@@ -61,9 +50,7 @@ public abstract class Interactable : MonoBehaviour
             return;
         }
     }
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
-    //--------------------------------------------------------------------------------------------------------------------------------------
 
     public void Interact(Interacter target)
     {
