@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public abstract class Pickup : MonoBehaviour
 {
     [SerializeField]
     List<ItemTaker> inRangeTakers;
@@ -10,17 +10,14 @@ public class Pickup : MonoBehaviour
     [SerializeField]
     ItemTaker closestTaker;
 
+    bool isTaken = false;
+
     void Start()
     {
         SphereCollider collider = gameObject.AddComponent<SphereCollider>();
         collider.center = new Vector3(0, -0.5f, 0);
         collider.isTrigger = true;
         collider.radius = 3;
-    }
-
-    void Update()
-    {
-        closestTaker = ClosestInRangeItem();
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -72,40 +69,15 @@ public class Pickup : MonoBehaviour
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
-    public ItemTaker ClosestInRangeItem()
+    public void Take(ItemTaker target)
     {
-        if (inRangeTakers.Count > 0)
+        if (!isTaken)
         {
-            if (inRangeTakers.Count == 1)
-            {
-                return inRangeTakers[0];
-            }
-            else
-            {
-                float lowestDist = Mathf.Infinity;
-                ItemTaker closest = null;
-
-                for (int i = 0; i < inRangeTakers.Count; i++)
-                {
-                    float current = calcDist(inRangeTakers[i]);
-                    if (current < lowestDist)
-                    {
-                        lowestDist = current;
-                        closest = inRangeTakers[i];
-                    }
-                }
-
-                return closest;
-            }
-        }else
-        {
-            return null;
+            isTaken = true;
+            take(target);
         }
     }
 
-    float calcDist(ItemTaker itemTaker)
-    {
-        return Vector3.Distance(itemTaker.transform.position, transform.position);
-    }
+    protected abstract void take(ItemTaker target);
 
 }

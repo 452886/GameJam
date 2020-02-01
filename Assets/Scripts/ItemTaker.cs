@@ -12,6 +12,56 @@ public class ItemTaker : MonoBehaviour
     {
         inRangePickups = new List<Pickup>();
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Pickup closest = ClosestInRangeItem();
+            if (closest)
+            {
+                closest.Take(this);
+            }
+        }
+    }
+
+    public Pickup ClosestInRangeItem()
+    {
+        if (inRangePickups.Count > 0)
+        {
+            if (inRangePickups.Count == 1)
+            {
+                return inRangePickups[0];
+            }
+            else
+            {
+                float lowestDist = Mathf.Infinity;
+                Pickup closest = null;
+                for (int i = 0; i < inRangePickups.Count; i++)
+                {
+                    float current = calcDist(inRangePickups[i].transform);
+                    if (current < lowestDist)
+                    {
+                        lowestDist = current;
+                        closest = inRangePickups[i];
+                    }
+                }
+
+                return closest;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    float calcDist(Transform tf)
+    {
+        return Vector3.Distance(tf.position, transform.position);
+    }
+
+
     public virtual void PickupEnterRange(Pickup pickup)
     {
         if (!inRangePickups.Contains(pickup))
