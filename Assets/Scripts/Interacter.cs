@@ -7,10 +7,10 @@ public class Interacter : MonoBehaviour
 {
     [SerializeField]
     List<Interactable> inRangeInteractables;
-    
+
     [SerializeField] ActivePlayer activePlayer;
 
-    private Pickup carryItem = null;
+    public Pickup carryItem = null;
     private Interactable closest;
 
     void start()
@@ -25,13 +25,13 @@ public class Interacter : MonoBehaviour
             this.closest = ClosestInRangeItem();
             if (this.closest)
             {
-                carryItem = closest is Pickup ? (Pickup)closest : null;
+                carryItem = closest is Pickup ? (Pickup)closest : carryItem;
                 closest.Interact(this);
             }
         }
 
 
-        if(Input.GetButtonUp(ActivePlayerData.Fire(activePlayer)))
+        if (Input.GetButtonUp(ActivePlayerData.Fire(activePlayer)))
         {
             if (this.closest)
             {
@@ -83,12 +83,6 @@ public class Interacter : MonoBehaviour
         }
     }
 
-    public virtual void InteractableIsInRange(Interactable interactable)
-    {
-        Debug.Log("item is in range: " + interactable.name);
-
-    }
-
     public virtual void InteractableExitsRange(Interactable interactable)
     {
         if (inRangeInteractables.Contains(interactable))
@@ -97,5 +91,14 @@ public class Interacter : MonoBehaviour
             if (interactable == this.closest) this.closest.FinishInteract(this);
         }
         Debug.Log("item exited range: " + interactable.name);
+    }
+
+    public Pickup CarriedItem
+    {
+        get { return carryItem; }
+    }
+    public void RemoveCarriedItem()
+    {
+        carryItem = null;
     }
 }
