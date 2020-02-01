@@ -33,7 +33,7 @@ public class PhysicsObject : MonoBehaviour
         currentGravity += gravity * Time.deltaTime;
         
         if(controller.isGrounded) currentGravity = -3f;
-        velocity += Vector3.up * currentGravity;
+        velocity = velocity + Vector3.up * currentGravity;
     }
 
     public void MoveCharacter() {
