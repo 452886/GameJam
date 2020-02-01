@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PhysicsObject : MonoBehaviour
 {
     [Header("Physics Object")]
     [SerializeField] float gravity = -20f;
-    [SerializeField] bool dontCollide;
 
-    private CharacterController controller;
+    protected CharacterController controller;
     private float currentGravity = 0f;
     private Vector3 velocity;
 
@@ -17,9 +14,6 @@ public class PhysicsObject : MonoBehaviour
     public virtual void Start()
     {
         this.controller = GetComponent<CharacterController>();
-        if(dontCollide) {
-            controller.detectCollisions = false;
-        }
     }
 
     // Update is called once per frame

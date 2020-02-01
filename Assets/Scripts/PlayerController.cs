@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using System.Linq;
 public class PlayerController : PhysicsObject
 {
     [Header("Player Controller")]
@@ -14,6 +14,12 @@ public class PlayerController : PhysicsObject
     public override void Start()
     {
         base.Start();
+        
+        GameObject.FindGameObjectsWithTag("Item").Select(x => {
+            return x.GetComponent<Collider>();
+        }).ToList().ForEach(c => {
+            Physics.IgnoreCollision(c, controller);
+        });
     }
 
     // Update is called once per frame
