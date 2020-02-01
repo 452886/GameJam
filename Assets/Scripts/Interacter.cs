@@ -26,9 +26,10 @@ public class Interacter : MonoBehaviour
             }
         }
 
-        if(Input.GetButtonUp("Fire1"))
+        if (Input.GetButtonUp("Fire1"))
         {
-            if(this.closest) {
+            if (this.closest)
+            {
                 this.closest.FinishInteract(this);
             }
         }
@@ -38,18 +39,18 @@ public class Interacter : MonoBehaviour
     {
         if (inRangeInteractables.Count > 0)
         {
-                float lowestDist = Mathf.Infinity;
-                closest = null;
-                for (int i = 0; i < inRangeInteractables.Count; i++)
+            float lowestDist = Mathf.Infinity;
+            closest = null;
+            for (int i = 0; i < inRangeInteractables.Count; i++)
+            {
+                float current = calcDist(inRangeInteractables[i].transform);
+                if (current < lowestDist && inRangeInteractables[i].isActive)
                 {
-                    float current = calcDist(inRangeInteractables[i].transform);
-                    if (current < lowestDist && inRangeInteractables[i].isActive)
-                    {
-                        lowestDist = current;
-                        closest = inRangeInteractables[i];
-                    }
+                    lowestDist = current;
+                    closest = inRangeInteractables[i];
                 }
-                return closest;
+            }
+            return closest;
         }
         else
         {
@@ -65,10 +66,15 @@ public class Interacter : MonoBehaviour
 
     public virtual void InteractableEntersRange(Interactable interactable)
     {
-        if (!inRangeInteractables.Contains(interactable))
+        if (interactable is Booster)
+        {
+            interactable.Interact(this);
+        }
+        else if (!inRangeInteractables.Contains(interactable))
         {
             inRangeInteractables.Add(interactable);
             Debug.Log("item entered range: " + inRangeInteractables.Count + " items in range");
+
         }
     }
 
@@ -83,7 +89,7 @@ public class Interacter : MonoBehaviour
         if (inRangeInteractables.Contains(interactable))
         {
             inRangeInteractables.Remove(interactable);
-            if(interactable == this.closest) this.closest.FinishInteract(this);
+            if (interactable == this.closest) this.closest.FinishInteract(this);
         }
         Debug.Log("item exited range: " + interactable.name);
     }

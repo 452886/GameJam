@@ -20,12 +20,12 @@ public abstract class Interactable : MonoBehaviour
 
     //--------------------------------------------------------------------------------------------------------------------------------------
 
-    void userEntersRange(Interacter enteringTaker)
+    void userEntersRange(Interacter enteringInteractor)
     {
-        if (!inRangeUsers.Contains(enteringTaker))
-            inRangeUsers.Add(enteringTaker);
+        if (!inRangeUsers.Contains(enteringInteractor))
+            inRangeUsers.Add(enteringInteractor);
 
-        enteringTaker.InteractableEntersRange(this);
+        enteringInteractor.InteractableEntersRange(this);
     }
 
     void usererExitsRange(Interacter exitingTaker)
