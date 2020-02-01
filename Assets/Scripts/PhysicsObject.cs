@@ -10,6 +10,8 @@ public class PhysicsObject : MonoBehaviour
     private float currentGravity = 0f;
     private Vector3 velocity;
 
+    private bool gravityEnabled = true;
+
     // Start is called before the first frame update
     public virtual void Start()
     {
@@ -27,8 +29,16 @@ public class PhysicsObject : MonoBehaviour
         this.velocity = velocity;
     }
 
+    public void DisableGravity() {
+        this.gravityEnabled = false;
+    }
+
+    public void EnableGravity() {
+        this.gravityEnabled = true;
+    }
+
     public void UpdateGravity() {
-        currentGravity += gravity * Time.deltaTime;
+        currentGravity += gravityEnabled ? gravity * Time.deltaTime : 0f;
         
         if(controller.isGrounded) currentGravity = -3f;
         velocity = velocity + Vector3.up * currentGravity;

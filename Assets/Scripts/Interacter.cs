@@ -69,7 +69,7 @@ public class Interacter : MonoBehaviour
 
     public virtual void InteractableEntersRange(Interactable interactable)
     {
-        if (interactable is Booster)
+        if (interactable is Booster || interactable is CageTrap)
         {
             interactable.Interact(this);
         }

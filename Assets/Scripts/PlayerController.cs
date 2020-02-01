@@ -6,7 +6,7 @@ public class PlayerController : PhysicsObject
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float acceleration = 2f;
     [SerializeField] float deceleration = 5f;
-    [SerializeField] ActivePlayer activePlayer = ActivePlayer.PLAYER1;
+    public ActivePlayer activePlayer = ActivePlayer.PLAYER1;
     private Vector3 moveVelocity;
 
     private float currentMovementSpeed = 5f;
