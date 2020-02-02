@@ -25,6 +25,10 @@ public class ShipProgress : MonoBehaviour
         if(this.currentMaximusRepairus >= constants.shipRepairWinCondition && shipCompleted != null) shipCompleted(team); 
     }
 
+    public int getCurrentShipProgression() {
+        return this.currentMaximusRepairus;
+    }
+
     void FixedUpdate()
     {
         slider.value = this.currentMaximusRepairus;

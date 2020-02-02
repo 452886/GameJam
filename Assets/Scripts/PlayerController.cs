@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using System.Linq;
+
 public class PlayerController : PhysicsObject
 {
     [Header("Player Controller")]
     [SerializeField] float movementSpeed = 5f;
-    [SerializeField] float acceleration = 2f;
-    [SerializeField] float deceleration = 5f;
+    [SerializeField] Transform characterMesh;
+    
+    [SerializeField] Animator animator;
     public ActivePlayer activePlayer = ActivePlayer.PLAYER1;
     private Vector3 moveVelocity;
+
 
     private float currentMovementSpeed = 5f;
     private float xAxis, yAxis;
@@ -59,6 +62,10 @@ public class PlayerController : PhysicsObject
 
         var xAxis = movingDisabled ? 0 : Input.GetAxisRaw(ActivePlayerData.Horizontal(activePlayer));
         var yAxis = movingDisabled ? 0 : Input.GetAxisRaw(ActivePlayerData.Vertical(activePlayer));
+
+        animator.SetBool("moving", Mathf.Abs(xAxis) + Mathf.Abs(yAxis) > 0);
+
+        characterMesh.LookAt(transform.localPosition + new Vector3(xAxis, 0f, yAxis).normalized);
 
         SetVelocity(new Vector3(xAxis, 0f, yAxis).normalized * currentMovementSpeed);
         
