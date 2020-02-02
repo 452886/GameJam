@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -10,7 +11,8 @@ public class ItemSpawnManager : MonoBehaviour
     List<itemInfo> unavailableInteracts = new List<itemInfo>();
     GameObject[] spawns;
 
-    int nrOfPickups = 0;
+    int nrOfCannonBalls = 0;
+    int nrOfWood = 0;
     int nrOfBoosters = 0;
 
 
@@ -45,9 +47,17 @@ public class ItemSpawnManager : MonoBehaviour
                         }
                         break;
 
-                    case ItemType.PICKUP:
-                        nrOfPickups++;
-                        if (nrOfPickups >= random.spawnLimit)
+                    case ItemType.CANNONBALL:
+                        nrOfCannonBalls++;
+                        if (nrOfCannonBalls >= random.spawnLimit)
+                        {
+                            availableInteracts.Remove(random);
+                            unavailableInteracts.Add(random);
+                        }
+                        break;
+                    case ItemType.WOOD:
+                        nrOfWood++;
+                        if (nrOfWood >= random.spawnLimit)
                         {
                             availableInteracts.Remove(random);
                             unavailableInteracts.Add(random);
@@ -65,7 +75,7 @@ public class ItemSpawnManager : MonoBehaviour
 [System.Serializable]
 public enum ItemType
 {
-    BOOSTER, PICKUP
+    BOOSTER, WOOD, CANNONBALL
 }
 
 [System.Serializable]
