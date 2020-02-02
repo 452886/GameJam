@@ -8,7 +8,9 @@ public class Tree : Interactable
 {
 
     [SerializeField] float duration = 5f;
-    [SerializeField] float respawnDuration = 10f;
+    private float respawnDuration;
+
+    [SerializeField] float respawnMin, respawnMax;
     [SerializeField] GameObject treeMesh;
 
     private float currentDuration;
@@ -28,6 +30,7 @@ public class Tree : Interactable
 
     public override void Start()
     {
+        respawnDuration = Random.Range(respawnMin, respawnMax);
         po = GetComponent<PhysicsObject>();
         spawnedTreeSlider = Instantiate(treeSliderPrefab);
         spawnedTreeSlider.transform.parent = canvas;
@@ -82,6 +85,7 @@ public class Tree : Interactable
             if(currentRespawnDuration >= respawnDuration) {
                 isActive = true;
                 currentRespawnDuration = 0f;
+                respawnDuration = Random.Range(respawnMin, respawnMax);
                 treeMesh.SetActive(true);
             }
         }
