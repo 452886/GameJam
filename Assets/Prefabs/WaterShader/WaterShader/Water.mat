@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water
-  m_Shader: {fileID: -6465566751694194690, guid: a9c00cb57f8c7214e9b890923a4f6901,
+  m_Shader: {fileID: -6465566751694194690, guid: c25f9aa9c7c3c404a9707eb6b763147d,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -66,10 +66,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_252B0355: 0.001
     - Vector1_280D0CB4: 0.01
+    - Vector1_43647809: 1500
     - Vector1_8F77CF92: 1
     - Vector1_DB49E78E: 0.7
-    - Vector1_F216E63C: 1
+    - Vector1_F216E63C: 0.85
+    - Vector1_F2484D98: 0.5
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -94,6 +97,7 @@ Material:
     m_Colors:
     - Color_E7800C7F: {r: 0.508366, g: 0.7918246, b: 0.9056604, a: 0}
     - Color_F6EA1EF8: {r: 0.3374959, g: 0.6415094, b: 0.2148452, a: 0}
+    - Vector2_7328ABBE: {r: 0.001, g: 0.001, b: 0, a: 0}
     - Vector2_7AF8644A: {r: 0, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
