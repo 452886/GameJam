@@ -6,14 +6,14 @@ public class PhysicsObject : MonoBehaviour
     [Header("Physics Object")]
     [SerializeField] float gravity = -20f;
 
-    protected CharacterController controller;
+    [HideInInspector] public CharacterController controller;
     private float currentGravity = 0f;
     private Vector3 velocity;
 
     private bool gravityEnabled = true;
 
     // Start is called before the first frame update
-    public virtual void Start()
+    public virtual void Awake()
     {
         this.controller = GetComponent<CharacterController>();
     }

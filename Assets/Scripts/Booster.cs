@@ -10,13 +10,15 @@ public class Booster : Interactable
     [SerializeField]
     float boostStrength = 5.0f;
 
-    MeshRenderer mr;
-    BoxCollider bc;
+    [SerializeField] GameObject hider;
+    // BoxCollider bc;
 
-    void Start()
+    public override void Start()
     {
-        mr = GetComponent<MeshRenderer>();
-        bc = GetComponent<BoxCollider>();
+        // mr = GetComponent<MeshRenderer>();
+        base.Start();
+        po = GetComponent<PhysicsObject>();
+        // bc = GetComponent<BoxCollider>();
     }
     protected override void finishInteract(Interacter target)
     {
@@ -30,7 +32,6 @@ public class Booster : Interactable
         {
             SetActive(false);
             StartCoroutine(buffTimer(target));
-            Debug.Log("reached");
         }
     }
 
@@ -46,8 +47,7 @@ public class Booster : Interactable
 
     void SetActive(bool state)
     {
-        mr.enabled = state;
-        bc.enabled = state;
+        hider.SetActive(state);
         this.isActive = state;
     }
 }

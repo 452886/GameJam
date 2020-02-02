@@ -8,67 +8,73 @@ public class ItemSpawnManager : MonoBehaviour
 {
     [SerializeField]
     List<itemInfo> availableInteracts = new List<itemInfo>();
-    List<itemInfo> unavailableInteracts = new List<itemInfo>();
-    GameObject[] spawns;
+    [SerializeField] int maxPowerupsPresent = 3;
+    List<SpawnInfo> spawns;
+    Dictionary<itemInfo, int> activeItems = new Dictionary<itemInfo, int>();
 
-    int nrOfCannonBalls = 0;
-    int nrOfWood = 0;
-    int nrOfBoosters = 0;
+    [SerializeField] float minSpawnTimer, maxSpawnTimer;
+
+    private float spawnTimer;
+    private float currentSPawnTimer = 0f;
 
 
     void Start()
     {
         findAllSpawns();
-        populateSpawns();
+        spawnTimer = Random.Range(minSpawnTimer, maxSpawnTimer);
+        availableInteracts.ForEach(ai => {
+            activeItems.Add(ai, 0);
+        });
+        
+        SpawnItem(availableInteracts[0]);
+
+    }
+
+    void Update()
+    {
+        if(activeItems.ToList().Sum(kv => {
+            return kv.Value;
+        }) < maxPowerupsPresent) {
+            currentSPawnTimer += Time.deltaTime;
+            if(currentSPawnTimer >= spawnTimer) {
+                currentSPawnTimer = 0;
+                spawnTimer = Random.Range(minSpawnTimer, maxSpawnTimer);
+                var spawnableItems = activeItems.ToList().Where(ai => {
+                    return activeItems[ai.Key] < ai.Key.spawnLimit;
+                }).ToList();
+                if(spawnableItems.Count > 0) {
+                    SpawnItem(spawnableItems[Random.Range(0, spawnableItems.Count)].Key);
+                }
+            }
+        } else {
+            currentSPawnTimer = 0;
+        }
     }
 
     void findAllSpawns()
     {
-        spawns = GameObject.FindGameObjectsWithTag("Spawn");
+        spawns = GameObject.FindGameObjectsWithTag("Spawn").Select(spawn => {
+            return new SpawnInfo(spawn.transform);
+        }).ToList();
     }
 
-    void populateSpawns()
-    {
+    void SpawnItem(itemInfo item) {
+        var availableSpawns = spawns.ToList().Where(x => {
+            return x.itemOnSpawnpoint == null; //!x.used;
+        }).ToList();
+        
+        var random = availableSpawns[Random.Range(0, availableSpawns.Count)];
+        
+        random.itemOnSpawnpoint = item;
+        var go = Instantiate(item.item);
+        go.GetComponent<Interactable>().spawnpoint = random;
+        go.transform.position = random.spawnPosition.position;
+        activeItems[item]++;
+    }
 
-        foreach (GameObject spawn in spawns)
-        {
-            if (availableInteracts.Count > 0)
-            {
-                var random = availableInteracts[Random.Range(0, availableInteracts.Count)];
-
-                switch (random.type)
-                {
-                    case ItemType.BOOSTER:
-                        nrOfBoosters++;
-                        if (nrOfBoosters >= random.spawnLimit)
-                        {
-                            availableInteracts.Remove(random);
-                            unavailableInteracts.Add(random);
-                        }
-                        break;
-
-                    case ItemType.CANNONBALL:
-                        nrOfCannonBalls++;
-                        if (nrOfCannonBalls >= random.spawnLimit)
-                        {
-                            availableInteracts.Remove(random);
-                            unavailableInteracts.Add(random);
-                        }
-                        break;
-                    case ItemType.WOOD:
-                        nrOfWood++;
-                        if (nrOfWood >= random.spawnLimit)
-                        {
-                            availableInteracts.Remove(random);
-                            unavailableInteracts.Add(random);
-                        }
-                        break;
-                }
-
-                GameObject go = Instantiate(random.item);
-                go.transform.position = spawn.transform.position;
-            }
-        }
+    public void FreeSpawnpoint(SpawnInfo info) {
+        activeItems[info.itemOnSpawnpoint.Value]--;
+        info.itemOnSpawnpoint = null;
     }
 }
 
@@ -82,9 +88,20 @@ public enum ItemType
 public struct itemInfo
 {
     public string name;
-    public GameObject item;
+    public Interactable item;
     public ItemType type;
     public int spawnLimit;
+}
+
+[System.Serializable]
+public class SpawnInfo {
+    public Transform spawnPosition;
+    // public bool used = false;
+    public itemInfo? itemOnSpawnpoint = null;
+
+    public SpawnInfo(Transform spawnPosition) {
+        this.spawnPosition = spawnPosition;
+    }
 }
 
 

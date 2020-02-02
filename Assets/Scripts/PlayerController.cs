@@ -9,6 +9,7 @@ public class PlayerController : PhysicsObject
     
     [SerializeField] Animator animator;
     public ActivePlayer activePlayer = ActivePlayer.PLAYER1;
+    public Team team;
     private Vector3 moveVelocity;
 
 
@@ -17,15 +18,10 @@ public class PlayerController : PhysicsObject
     private bool movingDisabled = false;
 
     // Start is called before the first frame update
-    public override void Start()
+    public override void Awake()
     {
-        base.Start();
+        base.Awake();
         currentMovementSpeed = movementSpeed;
-        GameObject.FindGameObjectsWithTag("Item").Select(x => {
-            return x.GetComponent<Collider>();
-        }).ToList().ForEach(c => {
-            Physics.IgnoreCollision(c, controller);
-        });
     }
 
     public void SetMovementSpeed(float ms) {

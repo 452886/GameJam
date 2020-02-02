@@ -1,17 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(SphereCollider))]
 public abstract class Interactable : MonoBehaviour
 {
     public bool isActive = true;
 
-    bool isBeingUsed = false;
+    public PhysicsObject po;
 
-    void Start()
+    bool isBeingUsed = false;
+    [HideInInspector] public SpawnInfo spawnpoint;
+
+    public virtual void Start()
     {
         SphereCollider collider = gameObject.GetComponent<SphereCollider>();
+        GameObject.FindGameObjectsWithTag("Player").Select(x => {
+            return x.GetComponent<CharacterController>();
+        }).ToList().ForEach(c => {
+            Physics.IgnoreCollision(c, po.controller);
+        });
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------------
@@ -58,6 +67,7 @@ public abstract class Interactable : MonoBehaviour
         {
             isBeingUsed = true;
             interact(target);
+            GameObject.FindGameObjectWithTag("Manager").GetComponent<ItemSpawnManager>().FreeSpawnpoint(spawnpoint);
         }
     }
 

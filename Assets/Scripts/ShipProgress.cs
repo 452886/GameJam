@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ShipProgress : MonoBehaviour
 {
-    [SerializeField] Team team;
+    public Team team;
     [SerializeField] Constants constants;
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Slider slider;

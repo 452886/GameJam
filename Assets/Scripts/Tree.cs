@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.UI;
+using System.Linq;
+using System.Collections.Generic;
 
 public class Tree : Interactable
 {
@@ -19,9 +22,13 @@ public class Tree : Interactable
     private GameObject spawnedTreeSlider;
     private Slider slider;
 
+    private Interacter chopper;
+    private List<ShipProgress> ships;
 
-    void Start()
+
+    public override void Start()
     {
+        po = GetComponent<PhysicsObject>();
         spawnedTreeSlider = Instantiate(treeSliderPrefab);
         spawnedTreeSlider.transform.parent = canvas;
         
@@ -29,15 +36,21 @@ public class Tree : Interactable
 
         slider.maxValue = duration;
         spawnedTreeSlider.SetActive(false);
+
+        ships = GameObject.FindGameObjectsWithTag("Ship").ToList().Select(ship => {
+            return ship.GetComponent<ShipProgress>();
+        }).ToList();
     }
 
     protected override void interact(Interacter target)
     {
+        this.chopper = target;
         interacting = true;
     }
 
     protected override void finishInteract(Interacter target)
     {
+        this.chopper = null;
         interacting = false;
     }
 
@@ -58,6 +71,10 @@ public class Tree : Interactable
                 currentDuration = 0f;
                 isActive = false;
                 treeMesh.SetActive(false);
+
+                this.ships.ForEach(ship => {
+                    if(ship.team == this.chopper.GetComponent<PlayerController>().team) ship.AddRepairPoints(1);
+                });
             }
         } else {
             spawnedTreeSlider.SetActive(false);

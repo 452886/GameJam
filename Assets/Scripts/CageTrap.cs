@@ -20,8 +20,10 @@ public class CageTrap : Interactable
         trapOwner = player;
     }
 
-    void Start()
+    public override void Start()
     {
+        base.Start();
+        po = GetComponentInChildren<PhysicsObject>();
         cage.GetComponent<Renderer>().enabled = false;
         cage.transform.position = new Vector3(cage.transform.position.x, cage.transform.position.y + cageHeight, cage.transform.position.z);
         cage.GetComponent<PhysicsObject>().DisableGravity();
