@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ShipProgress.unity
     guid: acba0bb2fbe6b5a2f851b4fd8f6856c6
+  - enabled: 1
+    path: Assets/Scenes/MelsDemoLevel.unity
+    guid: 69f0230ff22761d468e3dc3c69a8d92c
   m_configObjects: {}
